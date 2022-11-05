@@ -353,16 +353,19 @@ namespace ServerGridEditor
                     editedIsland.spawnerOverrides.Add(name, template);
                 }
 
-                editedIsland.harvestOverrideKeys = new List<string>();
-
-                foreach (DataGridViewRow row in harvestOverridesGrid.Rows)
+                if (!DontSaveHarvestOverrides)
                 {
-                    if (row.Index == harvestOverridesGrid.Rows.Count - 1) continue; //Last row is the new row
+                    editedIsland.harvestOverrideKeys = new List<string>();
 
-                    string foliageOverrideKey = (string)row.Cells[FoliageOverrideKey.Name].Value;
-                    
-                    if (!editedIsland.harvestOverrideKeys.Contains(foliageOverrideKey))
-                        editedIsland.harvestOverrideKeys.Add(foliageOverrideKey);
+                    foreach (DataGridViewRow row in harvestOverridesGrid.Rows)
+                    {
+                        if (row.Index == harvestOverridesGrid.Rows.Count - 1) continue; //Last row is the new row
+
+                        string foliageOverrideKey = (string)row.Cells[FoliageOverrideKey.Name].Value;
+
+                        if (!editedIsland.harvestOverrideKeys.Contains(foliageOverrideKey))
+                            editedIsland.harvestOverrideKeys.Add(foliageOverrideKey);
+                    }
                 }
 
                 editedIsland.minTreasureQuality = minTreasureQuality;
@@ -576,6 +579,16 @@ namespace ServerGridEditor
         private void harvestOverridesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        bool DontSaveHarvestOverrides = false;
+
+        private void harvestOverridesGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            DontSaveHarvestOverrides = true;
+            harvestOverridesGrid.Enabled = false;
+
+            label21.Text = "Harvest Overrides (disabled: none in project)";
         }
     }
 }

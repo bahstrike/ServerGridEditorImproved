@@ -32,13 +32,13 @@ namespace ServerGridEditor
             }
         }
 
-        public string ProjectsDir
+        /*public string ProjectsDir
         {
             get
             {
                 return BaseDir + "Projects\\";
             }
-        }
+        }*/
 
         public string ExportDir
         {

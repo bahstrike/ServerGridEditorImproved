@@ -285,7 +285,7 @@ namespace ServerGridEditor
             MainForm mainForm, int idGenerator, int regionsIdGenerator, List<SpawnerInfoData> spawnerOverrideTemplates, bool bUseUTCTime, bool usePVEServerConfiguration, string Day0, float globalTransitionMinZ, string AdditionalCmdLineParams, 
             Dictionary<string, string> OverrideShooterGameModeDefaultGameIni, DateTime lastImageOverride, bool showDiscoZoneInfo, string discoZonesImagePath, List<ShipPathData> shipPaths, List<TradeWindData> tradeWinds,
             List<PortalPathData> portalPathData, int shipPathsIdGenerator, int tradeWindsIdGenerator, int portalPathsIdGenerator,
-            bool showShipPathsInfo, bool showTradeWindsInfo, bool showPortalNodes, string modIDs, bool showIslandNames, bool showForeground, string foregroundImgPath, bool showTradeWindOverlay, string tradeWindOverlayImgPath, Dictionary<string, string> regionsTradeWindOverlayImgPath, string globalGameplaySetup,
+            bool showShipPathsInfo, bool showTradeWindsInfo, bool showPortalNodes, string modIDs, bool showIslandNames, bool showForeground, string foregroundImgPath, double foregroundScale, bool showTradeWindOverlay, string tradeWindOverlayImgPath, Dictionary<string, string> regionsTradeWindOverlayImgPath, string globalGameplaySetup,
             List<ServerTemplateData> serverTemplates, List<AppliedRegionTemplateData> appliedRegionTemplates, List<RegionTemplateData> regionTemplates, List<ServerConfiguration> serverConfigurations, List<RegionsCategory> regionsCategories, List<RegionsOverworldLocation> RegionsOverworldLocations, List<RegionsTreasureOverride> regionsTreasureOverrides, List<TransientNodeTemplate> transientNodeTemplates,List<FoliageAttachmentOverride> foliageAttachmentOverrides, bool bIsFinalExport, string MapImageURL, string OverallImageURL,string AuthListURL,
 			string WorldAtlasPassword, float columnUTCOffset, int numPathingGridRows, int numPathingGridColumns, bool[,] PathingGrid,  bool bUseAutoServerRestart, string ServerRestartTime, bool bEnableWhitelistCheats)
         {
@@ -470,6 +470,7 @@ namespace ServerGridEditor
             Data.showTradeWindOverlay = showTradeWindOverlay;
             Data.regionsBackgroundImgPath = regionsBackgroundImgPath;
             Data.foregroundImgPath = foregroundImgPath;
+            Data.foregroundScale = foregroundScale;
             Data.tradeWindOverlayImgPath = tradeWindOverlayImgPath;
 
             if (regionsTradeWindOverlayImgPath != null)
@@ -625,6 +626,7 @@ namespace ServerGridEditor
     public class Project
     {
         public bool successfullyLoaded;
+        public string fullJSONPath;
         public List<IslandInstanceData> islandInstances = new List<IslandInstanceData>();
         public List<Server> servers = new List<Server>();
         public List<DiscoveryZoneData> discoZones = new List<DiscoveryZoneData>();
@@ -702,6 +704,7 @@ namespace ServerGridEditor
         public bool showTradeWindOverlay = false;
         public Dictionary<string, string> regionsBackgroundImgPath = new Dictionary<string, string>();
         public string foregroundImgPath = null;
+        public double foregroundScale = 1.0;
         public string tradeWindOverlayImgPath = null;
         public Dictionary<string, string> regionsTradeWindOverlayImgPath = new Dictionary<string, string>();
 
@@ -747,6 +750,7 @@ namespace ServerGridEditor
 
         public Project(float cellSize, int numOfCellsX, int numOfCellsY)
         {
+            fullJSONPath = string.Empty;
             this.cellSize = cellSize;
             this.numOfCellsX = numOfCellsX;
             this.numOfCellsY = numOfCellsY;
@@ -761,9 +765,10 @@ namespace ServerGridEditor
             }
         }
 
-        public Project(string json, MainForm mainForm)
+        public Project(string _fullJSONPath, string json, MainForm mainForm)
         {
             successfullyLoaded = false;
+            fullJSONPath = _fullJSONPath;
             Deserialize(json, mainForm);
         }
 
@@ -791,7 +796,7 @@ namespace ServerGridEditor
             AtlasGridData ProjectObj = new AtlasGridData().SetFromData(cellSize, servers, islandInstances, discoZones, spawnRegions, WorldAtlasId, WorldFriendlyName, MainRegionName,MetaWorldURL, ServerGroupsAndClusterSetsScheduleBaseURL, ServerGroupsAndClusterSetsScheduleS3AccessKeyId, ServerGroupsAndClusterSetsScheduleS3SecretKey, ServerGroupsAndClusterSetsScheduleS3BucketName, ServerGroupsAndClusterSetsScheduleS3Region, ServerGroupsAndClusterSetsScheduleFilename, MapImagesExtension,
                 coordsScaling, showServerInfo, showLines, alphaBackground, showBackground, regionsBackgroundImgPath, mainForm, idGenerator, regionsIdGenerator, mainForm.spawners.spawnersInfo, bUseUTCTime, usePVEServerConfiguration,
                 Day0, globalTransitionMinZ, AdditionalCmdLineParams, OverrideShooterGameModeDefaultGameIni, LastImageOverrideUTC, showDiscoZoneInfo, discoZonesImagePath, shipPaths, tradeWinds, portalPaths,
-                shipPathsIdGenerator, tradeWindsIdGenerator, portalPathsIdGenerator, showShipPathsInfo, showTradeWindsInfo, showPortalNodes, ModIDs, showIslandNames, showForeground, foregroundImgPath, showTradeWindOverlay, tradeWindOverlayImgPath, regionsTradeWindOverlayImgPath, globalGameplaySetup, serverTemplates, appliedRegionTemplates, regionTemplates, serverConfigurations, regionsCategories, regionsOverworldLocations, regionsTreasureOverrides, transientNodeTemplates, foliageAttachmentOverrides,
+                shipPathsIdGenerator, tradeWindsIdGenerator, portalPathsIdGenerator, showShipPathsInfo, showTradeWindsInfo, showPortalNodes, ModIDs, showIslandNames, showForeground, foregroundImgPath, foregroundScale, showTradeWindOverlay, tradeWindOverlayImgPath, regionsTradeWindOverlayImgPath, globalGameplaySetup, serverTemplates, appliedRegionTemplates, regionTemplates, serverConfigurations, regionsCategories, regionsOverworldLocations, regionsTreasureOverrides, transientNodeTemplates, foliageAttachmentOverrides,
                 bIsFinalExport, MapImageURL, OverallImageURL, AuthListURL,
 				WorldAtlasPassword, columnUTCOffset, numPathingGridRows, numPathingGridColumns, AtlasPathingGrid, bUseAutoServerRestart, ServerRestartTime, bEnableWhitelistCheats);
             ProjectObj.BaseServerArgs = BaseServerArgs;
@@ -1102,6 +1107,7 @@ namespace ServerGridEditor
                 showTradeWindOverlay = deserializedProject.showTradeWindOverlay;
                 regionsBackgroundImgPath = deserializedProject.regionsBackgroundImgPath;
                 foregroundImgPath = deserializedProject.foregroundImgPath;
+                foregroundScale = deserializedProject.foregroundScale;
                 tradeWindOverlayImgPath = deserializedProject.tradeWindOverlayImgPath;
                 regionsTradeWindOverlayImgPath = deserializedProject.regionsTradeWindOverlayImgPath != null ? deserializedProject.regionsTradeWindOverlayImgPath : new Dictionary<string, string> ();
                 discoZonesImagePath = deserializedProject.discoZonesImagePath;
