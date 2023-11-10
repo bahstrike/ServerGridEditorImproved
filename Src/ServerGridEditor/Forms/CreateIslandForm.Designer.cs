@@ -564,6 +564,7 @@
             this.harvestOverridesGrid.Size = new System.Drawing.Size(323, 162);
             this.harvestOverridesGrid.TabIndex = 61;
             this.harvestOverridesGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.harvestOverridesGrid_CellContentClick);
+            this.harvestOverridesGrid.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.harvestOverridesGrid_DataError);
             // 
             // FoliageOverrideKey
             // 

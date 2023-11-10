@@ -353,6 +353,8 @@ namespace ServerGridEditor
                     editedIsland.spawnerOverrides.Add(name, template);
                 }
 
+                if (!DontSaveHarvestOverrides)
+                {
                 editedIsland.harvestOverrideKeys = new List<string>();
 
                 foreach (DataGridViewRow row in harvestOverridesGrid.Rows)
@@ -363,6 +365,7 @@ namespace ServerGridEditor
                     
                     if (!editedIsland.harvestOverrideKeys.Contains(foliageOverrideKey))
                         editedIsland.harvestOverrideKeys.Add(foliageOverrideKey);
+                }
                 }
 
                 editedIsland.minTreasureQuality = minTreasureQuality;
@@ -577,5 +580,15 @@ namespace ServerGridEditor
         {
 
         }
+
+        bool DontSaveHarvestOverrides = false;
+
+        private void harvestOverridesGrid_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            DontSaveHarvestOverrides = true;
+            harvestOverridesGrid.Enabled = false;
+
+            label21.Text = "Harvest Overrides (disabled: none in project)";
     }
+}
 }

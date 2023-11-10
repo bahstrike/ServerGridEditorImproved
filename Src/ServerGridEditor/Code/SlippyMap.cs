@@ -59,7 +59,7 @@ namespace ServerGridEditor.Code
                         showLines: showLines, showServerInfo: showServerInfo, showDiscoZoneInfo : showDiscoZoneInfo, 
                         culling: null, alphaBackground: backgroundColor,
                         regionsTile: tile, regionsTileBrush: tileBrush, tileScale: 0,
-                        translateH: 0, translateV: 0, forExport: true, bShowPathingGrid: false, startX: 0, startY: 0, isSingleCell: true);
+                        translateH: 0, translateV: 0, forExport: true, forceCleanExport:false/*uncertain; keep existing behavior for now*/, bShowPathingGrid: false, startX: 0, startY: 0, isSingleCell: true);
 
                     // map.Save(Path.Combine(outdir, "export.png"), ImageFormat.Png);
 

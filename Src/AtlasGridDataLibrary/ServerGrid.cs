@@ -171,6 +171,8 @@ namespace AtlasGridDataLibrary
         public Dictionary<string, string> regionsBackgroundImgPath = new Dictionary<string, string>();
 
         public string foregroundImgPath = null;
+        [DefaultValue(1.0)]
+        public double foregroundScale = 1.0;
         public string tradeWindOverlayImgPath = null;
         public Dictionary<string, string> regionsTradeWindOverlayImgPath = new Dictionary<string, string>();
 
